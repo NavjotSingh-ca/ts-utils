@@ -1,0 +1,52 @@
+{
+  "name": "ts-utils",
+  "version": "1.0.0",
+  "description": "A small collection of battle-tested TypeScript utilities — SHA-256 hashing, HTML escaping, XSS sanitization, exact-cent currency math, and Tailwind className merging",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "utils",
+    "typescript",
+    "hash",
+    "sha256",
+    "html-escape",
+    "sanitize",
+    "xss",
+    "currency",
+    "money",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "dinero.js": "^2.0.2",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.8.0",
+    "vitest": "^4.1.8"
+  }
+}
