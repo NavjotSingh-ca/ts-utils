@@ -44,15 +44,11 @@
     "url": "https://github.com/NavjotSingh-ca/ts-utils/issues"
   },
   "homepage": "https://github.com/NavjotSingh-ca/ts-utils#readme",
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run build && npm test"
+    "prepare": "npm run build"
   },
   "dependencies": {
     "clsx": "^2.1.1",

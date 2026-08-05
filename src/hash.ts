@@ -1,7 +1,39 @@
 /**
  * SHA-256 hashing helpers built on the Web Crypto API.
- * Works in browsers and Node.js 18+ (global `crypto.subtle`).
+ * Works in browsers and Node.js 18+ (Node < 19 automatically falls back to
+ * `node:crypto`'s WebCrypto implementation, which needs no flag).
  */
+
+/**
+ * Resolves a Web Crypto `SubtleCrypto` instance across environments.
+ *
+ * - Browsers: `globalThis.crypto.subtle` (always present in secure contexts)
+ * - Node 19+: `globalThis.crypto.subtle`
+ * - Node 18 (no `--experimental-global-webcrypto` flag): falls back to
+ *   `node:crypto`'s `webcrypto` implementation via a lazy dynamic import.
+ *
+ * The dynamic `node:crypto` import only ever executes in Node runtimes
+ * that lack the global — browser bundlers never reach it.
+ *
+ * @throws {Error} If no Web Crypto implementation is available.
+ */
+async function getSubtle(): Promise<SubtleCrypto> {
+  const g = globalThis as { crypto?: { subtle?: SubtleCrypto } };
+  if (g.crypto?.subtle) {
+    return g.crypto.subtle;
+  }
+
+  const nodeCrypto = (await import('node:crypto').catch(() => null)) as {
+    webcrypto?: { subtle?: SubtleCrypto };
+  } | null;
+  if (nodeCrypto?.webcrypto?.subtle) {
+    return nodeCrypto.webcrypto.subtle;
+  }
+
+  throw new Error(
+    'Web Crypto API (crypto.subtle) is not available in this environment',
+  );
+}
 
 /**
  * Generates a SHA-256 hex digest of a string.
@@ -13,7 +45,7 @@
 export async function generateSHA256(dataString: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(dataString);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashBuffer = await (await getSubtle()).digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
@@ -54,7 +86,7 @@ export async function generateIntegrityHash(fileBuffer: BufferSource): Promise<s
     throw new Error('Cannot generate hash from empty buffer');
   }
 
-  const hashBuffer = await crypto.subtle.digest('SHA-256', fileBuffer);
+  const hashBuffer = await (await getSubtle()).digest('SHA-256', fileBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashString = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 

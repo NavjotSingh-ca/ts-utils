@@ -1,4 +1,4 @@
-# ts-utils
+﻿# ts-utils
 
 A small collection of battle-tested TypeScript utilities extracted from a production receipt-management application. Zero dependencies beyond the obvious ones, fully typed, unit-tested.
 
@@ -8,7 +8,7 @@ A small collection of battle-tested TypeScript utilities extracted from a produc
 npm install ts-utils
 ```
 
-Requires Node.js >= 18. TypeScript declarations are bundled.
+Requires Node.js >= 18 (or any browser) — the hashing helpers use the Web Crypto API, which is available globally in browsers and Node 19+, with automatic fallback to `node:crypto`'s WebCrypto implementation on Node 18. TypeScript declarations are bundled.
 
 ## Utilities
 
