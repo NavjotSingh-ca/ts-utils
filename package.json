@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "ts-utils",
   "version": "1.0.0",
   "description": "A small collection of battle-tested TypeScript utilities — SHA-256 hashing, HTML escaping, XSS sanitization, exact-cent currency math, and Tailwind className merging",
@@ -58,6 +58,6 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.8.0",
-    "vitest": "^4.1.8"
+    "vitest": "^3.2.0"
   }
 }
